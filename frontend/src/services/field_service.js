@@ -255,3 +255,27 @@ export const deleteField = async (
 
   return result;
 };
+
+/* =========================================================
+   GET ALL FIELDS AVAILABILITY
+   BE-05.1
+========================================================= */
+
+export const getAllFieldsAvailability = async (date) => {
+
+  const response = await fetch(
+    `${API_URL}/availability?date=${encodeURIComponent(date)}`
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+
+    throw new Error(
+      result.message ||
+      "Không thể kiểm tra lịch toàn bộ sân"
+    );
+  }
+
+  return result;
+};

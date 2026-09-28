@@ -9,7 +9,9 @@ import Booking from "../pages/Booking/Booking";
 import Pricing from "../pages/Pricing/Pricing";
 import About from "../pages/About/About";
 import Admin from "../pages/Admin/Admin";
-
+import Payment from "../pages/Payment/Payment";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import Account from "../pages/Account/Account";
 function AppRoutes() {
   return (
     <Routes>
@@ -23,7 +25,40 @@ function AppRoutes() {
 
       <Route path="/fields/:id" element={<FieldDetail />} />
 
-      <Route path="/booking" element={<Booking />} />
+      <Route
+        path="/booking"
+        element={
+          <ProtectedRoute>
+
+            <Booking />
+
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/payment"
+        element={
+          <ProtectedRoute>
+
+            <Payment />
+
+          </ProtectedRoute>
+        }
+      />
+
+
+      <Route
+        path="/account"
+        element={
+          <ProtectedRoute>
+
+            <Account />
+
+          </ProtectedRoute>
+        }
+      />
 
       <Route path="/pricing" element={<Pricing />} />
 
