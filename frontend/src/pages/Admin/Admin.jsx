@@ -935,7 +935,7 @@ function Admin() {
         const response =
           await fetch(
 
-            `http://127.0.0.1:5000/api/fields/${field.FieldID}`,
+            `${import.meta.env.VITE_API_URL}/api/fields/${field.FieldID}`,
 
             {
               method: "DELETE"
@@ -1019,7 +1019,7 @@ function Admin() {
 
       const statusMeta =
         BOOKING_STATUS[
-          newStatus
+        newStatus
         ];
 
 
@@ -1113,7 +1113,7 @@ function Admin() {
 
       const meta =
         BOOKING_STATUS[
-          normalized
+        normalized
         ]
         ||
         {
@@ -1439,8 +1439,8 @@ function Admin() {
 
             className={
               activeSection
-              ===
-              "fields"
+                ===
+                "fields"
 
                 ? "active"
 
@@ -1470,8 +1470,8 @@ function Admin() {
 
             className={
               activeSection
-              ===
-              "bookings"
+                ===
+                "bookings"
 
                 ? "active"
 
@@ -1557,8 +1557,8 @@ function Admin() {
 
             placeholder={
               activeSection
-              ===
-              "fields"
+                ===
+                "fields"
 
                 ? "🔍 Tìm kiếm tên sân..."
 
@@ -1567,8 +1567,8 @@ function Admin() {
 
             value={
               activeSection
-              ===
-              "fields"
+                ===
+                "fields"
 
                 ? searchText
 
@@ -2049,8 +2049,8 @@ function Admin() {
 
                                         className={
                                           field.Status
-                                          ===
-                                          "AVAILABLE"
+                                            ===
+                                            "AVAILABLE"
 
                                             ? "status available"
 
@@ -2135,8 +2135,8 @@ function Admin() {
 
                                               {
                                                 deletingFieldID
-                                                ===
-                                                field.FieldID
+                                                  ===
+                                                  field.FieldID
 
                                                   ? "Đang xóa..."
 

@@ -160,7 +160,7 @@ function Login() {
 
       const response =
         await axios.post(
-          "http://127.0.0.1:5000/api/auth/login",
+          `${import.meta.env.VITE_API_URL}/api/auth/login`,
           {
             account:
               formData.account.trim(),
@@ -242,10 +242,10 @@ function Login() {
 
       const safeRedirect =
         redirectTo
-        &&
-        redirectTo.startsWith("/")
-        &&
-        !redirectTo.startsWith("//")
+          &&
+          redirectTo.startsWith("/")
+          &&
+          !redirectTo.startsWith("//")
           ? redirectTo
           : null;
 
@@ -419,10 +419,9 @@ function Login() {
             <div
 
               className={
-                `login-input-wrapper ${
-                  errors.account
-                    ? "input-error"
-                    : ""
+                `login-input-wrapper ${errors.account
+                  ? "input-error"
+                  : ""
                 }`
               }
 
@@ -497,10 +496,9 @@ function Login() {
             <div
 
               className={
-                `login-input-wrapper ${
-                  errors.password
-                    ? "input-error"
-                    : ""
+                `login-input-wrapper ${errors.password
+                  ? "input-error"
+                  : ""
                 }`
               }
 
