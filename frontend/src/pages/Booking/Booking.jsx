@@ -142,7 +142,9 @@ function Booking() {
           );
 
         const result =
-          data.Fields || [];
+          Array.isArray(data)
+            ? data
+            : data.Fields || [];
 
         setFields(
           result
@@ -199,7 +201,7 @@ function Booking() {
         );
 
       } catch (
-        loadError
+      loadError
       ) {
 
         console.error(
@@ -647,10 +649,10 @@ function Booking() {
                           Number(
                             selectedField
                           )
-                          ===
-                          Number(
-                            field.FieldID
-                          )
+                            ===
+                            Number(
+                              field.FieldID
+                            )
 
                             ? "field-item active"
 
@@ -718,347 +720,345 @@ function Booking() {
 
               {
                 loading
-                ? (
-
-                  <div
-                    className="
-                      booking-state-card
-                    "
-                  >
-
-                    <LoaderCircle
-                      size={30}
-                    />
-
-                    <h2>
-                      Đang tải lịch sân...
-                    </h2>
-
-                  </div>
-
-                )
-                : error
                   ? (
 
                     <div
                       className="
-                        booking-state-card
-                      "
+                      booking-state-card
+                    "
                     >
 
-                      <h2>
-                        Không thể tải lịch sân
-                      </h2>
+                      <LoaderCircle
+                        size={30}
+                      />
 
-                      <p>
-                        {error}
-                      </p>
+                      <h2>
+                        Đang tải lịch sân...
+                      </h2>
 
                     </div>
 
                   )
-                  : currentField
+                  : error
                     ? (
 
-                      <>
+                      <div
+                        className="
+                        booking-state-card
+                      "
+                      >
 
-                        {/* HEADER */}
+                        <h2>
+                          Không thể tải lịch sân
+                        </h2>
 
-                        <div
-                          className="
-                            booking-header-card
-                          "
-                        >
+                        <p>
+                          {error}
+                        </p>
 
-                          <div>
+                      </div>
 
-                            <h1>
-                              CHỌN KHUNG GIỜ
-                            </h1>
+                    )
+                    : currentField
+                      ? (
 
+                        <>
 
-                            <div
-                              className="
-                                booking-meta
-                              "
-                            >
-
-                              <span>
-
-                                Sân:
-
-                                <strong>
-                                  {" "}
-                                  {
-                                    currentField
-                                      .FieldName
-                                  }
-                                </strong>
-
-                              </span>
-
-
-                              <span>
-
-                                Loại:
-
-                                <strong>
-                                  {" "}
-                                  {
-                                    currentField
-                                      .FieldType
-                                  }
-                                </strong>
-
-                              </span>
-
-
-                              <span>
-
-                                <MapPin
-                                  size={14}
-                                />
-
-                                {
-                                  currentField
-                                    .Location
-                                }
-
-                              </span>
-
-                            </div>
-
-                          </div>
-
-
-                          <div
-                            className="date-btn"
-                          >
-
-                            <CalendarDays
-                              size={18}
-                            />
-
-                            {
-                              bookingDate
-                            }
-
-                          </div>
-
-                        </div>
-
-
-                        {/* SLOT */}
-
-                        <div
-                          className="schedule-card"
-                        >
+                          {/* HEADER */}
 
                           <div
                             className="
-                              schedule-head
-                            "
+                            booking-header-card
+                          "
                           >
 
                             <div>
-                              KHUNG GIỜ
+
+                              <h1>
+                                CHỌN KHUNG GIỜ
+                              </h1>
+
+
+                              <div
+                                className="
+                                booking-meta
+                              "
+                              >
+
+                                <span>
+
+                                  Sân:
+
+                                  <strong>
+                                    {" "}
+                                    {
+                                      currentField
+                                        .FieldName
+                                    }
+                                  </strong>
+
+                                </span>
+
+
+                                <span>
+
+                                  Loại:
+
+                                  <strong>
+                                    {" "}
+                                    {
+                                      currentField
+                                        .FieldType
+                                    }
+                                  </strong>
+
+                                </span>
+
+
+                                <span>
+
+                                  <MapPin
+                                    size={14}
+                                  />
+
+                                  {
+                                    currentField
+                                      .Location
+                                  }
+
+                                </span>
+
+                              </div>
+
                             </div>
 
-                            <div>
-                              GIÁ
-                            </div>
 
-                            <div>
-                              TRẠNG THÁI
+                            <div
+                              className="date-btn"
+                            >
+
+                              <CalendarDays
+                                size={18}
+                              />
+
+                              {
+                                bookingDate
+                              }
+
                             </div>
 
                           </div>
 
 
-                          {
-                            (
-                              currentField
-                                .Slots
-                              ||
-                              []
-                            ).map(
-                              slot => {
+                          {/* SLOT */}
 
-                                const isSelected =
-                                  selectedSlot
-                                    ?.PriceID
-                                  ===
-                                  slot.PriceID;
+                          <div
+                            className="schedule-card"
+                          >
 
+                            <div
+                              className="
+                              schedule-head
+                            "
+                            >
 
-                                const disabled =
-                                  !slot.available;
+                              <div>
+                                KHUNG GIỜ
+                              </div>
 
+                              <div>
+                                GIÁ
+                              </div>
 
-                                return (
+                              <div>
+                                TRẠNG THÁI
+                              </div>
 
-                                  <button
+                            </div>
 
-                                    key={
-                                      slot.PriceID
-                                    }
-
-                                    type="button"
-
-                                    disabled={
-                                      disabled
-                                    }
-
-                                    className={
-                                      `schedule-row ${
-                                        isSelected
-                                          ? "selected"
-                                          : ""
-                                      } ${
-                                        disabled
-                                          ? "disabled"
-                                          : ""
-                                      }`
-                                    }
-
-                                    onClick={
-                                      () =>
-                                        handleSelectSlot(
-                                          slot
-                                        )
-                                    }
-
-                                  >
-
-                                    <div>
-
-                                      {
-                                        slot.StartTime
-                                      }
-
-                                      {" - "}
-
-                                      {
-                                        slot.EndTime
-                                      }
-
-                                    </div>
-
-
-                                    <div>
-
-                                      {
-                                        formatPrice(
-                                          slot.Price
-                                        )
-                                      }
-
-                                      đ
-
-                                    </div>
-
-
-                                    <div
-                                      className={
-                                        slot.available
-                                          ? "status-cell available"
-                                          : "status-cell booked"
-                                      }
-                                    >
-
-                                      {
-                                        slot.available
-                                          ? "Trống"
-                                          : slot.reason
-                                            ===
-                                            "FIELD_UNAVAILABLE"
-                                              ? "Bảo trì"
-                                              : "Đã đặt"
-                                      }
-
-                                    </div>
-
-                                  </button>
-
-                                );
-                              }
-                            )
-                          }
-
-                        </div>
-
-
-                        {/* BOTTOM */}
-
-                        <div
-                          className="booking-bottom"
-                        >
-
-                          <div>
 
                             {
-                              selectedSlot
-                              &&
                               (
+                                currentField
+                                  .Slots
+                                ||
+                                []
+                              ).map(
+                                slot => {
 
-                                <strong>
+                                  const isSelected =
+                                    selectedSlot
+                                      ?.PriceID
+                                    ===
+                                    slot.PriceID;
 
-                                  Tạm tính:{" "}
 
-                                  {
-                                    formatPrice(
-                                      selectedSlot.Price
-                                    )
-                                  }
+                                  const disabled =
+                                    !slot.available;
 
-                                  đ
 
-                                </strong>
+                                  return (
 
+                                    <button
+
+                                      key={
+                                        slot.PriceID
+                                      }
+
+                                      type="button"
+
+                                      disabled={
+                                        disabled
+                                      }
+
+                                      className={
+                                        `schedule-row ${isSelected
+                                          ? "selected"
+                                          : ""
+                                        } ${disabled
+                                          ? "disabled"
+                                          : ""
+                                        }`
+                                      }
+
+                                      onClick={
+                                        () =>
+                                          handleSelectSlot(
+                                            slot
+                                          )
+                                      }
+
+                                    >
+
+                                      <div>
+
+                                        {
+                                          slot.StartTime
+                                        }
+
+                                        {" - "}
+
+                                        {
+                                          slot.EndTime
+                                        }
+
+                                      </div>
+
+
+                                      <div>
+
+                                        {
+                                          formatPrice(
+                                            slot.Price
+                                          )
+                                        }
+
+                                        đ
+
+                                      </div>
+
+
+                                      <div
+                                        className={
+                                          slot.available
+                                            ? "status-cell available"
+                                            : "status-cell booked"
+                                        }
+                                      >
+
+                                        {
+                                          slot.available
+                                            ? "Trống"
+                                            : slot.reason
+                                              ===
+                                              "FIELD_UNAVAILABLE"
+                                              ? "Bảo trì"
+                                              : "Đã đặt"
+                                        }
+
+                                      </div>
+
+                                    </button>
+
+                                  );
+                                }
                               )
                             }
 
                           </div>
 
 
-                          <button
+                          {/* BOTTOM */}
 
-                            type="button"
+                          <div
+                            className="booking-bottom"
+                          >
 
-                            className="
+                            <div>
+
+                              {
+                                selectedSlot
+                                &&
+                                (
+
+                                  <strong>
+
+                                    Tạm tính:{" "}
+
+                                    {
+                                      formatPrice(
+                                        selectedSlot.Price
+                                      )
+                                    }
+
+                                    đ
+
+                                  </strong>
+
+                                )
+                              }
+
+                            </div>
+
+
+                            <button
+
+                              type="button"
+
+                              className="
                               continue-btn
                             "
 
-                            disabled={
-                              !selectedSlot
-                            }
+                              disabled={
+                                !selectedSlot
+                              }
 
-                            onClick={
-                              handleContinue
-                            }
+                              onClick={
+                                handleContinue
+                              }
 
-                          >
+                            >
 
-                            Tiếp tục thanh toán
+                              Tiếp tục thanh toán
 
-                            <ArrowRight
-                              size={19}
-                            />
+                              <ArrowRight
+                                size={19}
+                              />
 
-                          </button>
+                            </button>
 
+                          </div>
+
+                        </>
+
+                      )
+                      : (
+
+                        <div>
+                          Không tìm thấy sân.
                         </div>
 
-                      </>
-
-                    )
-                    : (
-
-                      <div>
-                        Không tìm thấy sân.
-                      </div>
-
-                    )
+                      )
               }
 
             </div>
