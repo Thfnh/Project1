@@ -12,7 +12,7 @@ RUN apt-get update \
     && curl https://packages.microsoft.com/config/debian/12/prod.list \
         -o /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
+    && ACCEPT_EULA=Y apt-get install -y msodbcsql18 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -23,4 +23,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-5000} app:app"]

@@ -1,5 +1,5 @@
 import {
-  Link
+  useNavigate
 } from "react-router-dom";
 
 import {
@@ -17,20 +17,38 @@ import "./FieldCard.css";
 function FieldCard({
 
   id,
-
   name,
-
   address,
-
   type,
-
   status,
-
   selectedDate,
-
   slots = []
 
 }) {
+
+  const navigate =
+    useNavigate();
+
+
+  /* =========================================================
+     CHECK USER LOGIN
+  ========================================================= */
+
+  const getCurrentUser = () => {
+
+    try {
+
+      return JSON.parse(
+        localStorage.getItem(
+          "user"
+        )
+      );
+
+    } catch {
+
+      return null;
+    }
+  };
 
 
   /* =========================================================
@@ -66,16 +84,14 @@ function FieldCard({
 
   const minPrice =
     prices.length > 0
-
       ? Math.min(
           ...prices
         )
-
       : 0;
 
 
   /* =========================================================
-     STATUS
+     FIELD STATUS
   ========================================================= */
 
   const fieldAvailable =
@@ -83,24 +99,57 @@ function FieldCard({
 
 
   /* =========================================================
-     JSX
+     CHOOSE FIELD
   ========================================================= */
+
+  const handleChooseField = () => {
+
+    const user =
+      getCurrentUser();
+
+
+    const bookingUrl =
+      `/booking?fieldId=${id}&date=${selectedDate}`;
+
+
+    /*
+      Chưa đăng nhập:
+      đưa sang Login và nhớ URL booking.
+    */
+
+    if (!user) {
+
+      navigate(
+        `/login?redirect=${encodeURIComponent(
+          bookingUrl
+        )}`
+      );
+
+      return;
+    }
+
+
+    /*
+      Đã đăng nhập:
+      vào thẳng Booking.
+    */
+
+    navigate(
+      bookingUrl
+    );
+  };
+
 
   return (
 
     <article
-      className="
-        field-card
-      "
+      className="field-card"
     >
-
 
       {/* IMAGE */}
 
       <div
-        className="
-          field-image-wrapper
-        "
+        className="field-image-wrapper"
       >
 
         <img
@@ -113,9 +162,7 @@ function FieldCard({
             name
           }
 
-          className="
-            field-image
-          "
+          className="field-image"
 
         />
 
@@ -142,18 +189,13 @@ function FieldCard({
       {/* CONTENT */}
 
       <div
-        className="
-          field-content
-        "
+        className="field-content"
       >
-
 
         {/* TITLE */}
 
         <div
-          className="
-            field-title-row
-          "
+          className="field-title-row"
         >
 
           <h3
@@ -172,15 +214,11 @@ function FieldCard({
         {/* INFORMATION */}
 
         <div
-          className="
-            field-info
-          "
+          className="field-info"
         >
 
           <div
-            className="
-              field-info-row
-            "
+            className="field-info-row"
           >
 
             <MapPin
@@ -195,9 +233,7 @@ function FieldCard({
 
 
           <div
-            className="
-              field-info-row
-            "
+            className="field-info-row"
           >
 
             <Users
@@ -212,9 +248,7 @@ function FieldCard({
 
 
           <div
-            className="
-              field-info-row
-            "
+            className="field-info-row"
           >
 
             <CalendarDays
@@ -230,18 +264,14 @@ function FieldCard({
         </div>
 
 
-        {/* SLOT */}
+        {/* SLOTS */}
 
         <div
-          className="
-            field-slots
-          "
+          className="field-slots"
         >
 
           <div
-            className="
-              field-slots-title
-            "
+            className="field-slots-title"
           >
             KHUNG GIỜ
           </div>
@@ -249,139 +279,125 @@ function FieldCard({
 
           {
             slots.length === 0
-            ? (
+              ? (
 
-              <div
-                className="
-                  field-no-slot
-                "
-              >
-                Chưa có bảng giá
-              </div>
+                <div
+                  className="field-no-slot"
+                >
 
-            )
-            : (
+                  Chưa có bảng giá
 
-              slots.map(
-                slot => (
+                </div>
 
-                  <div
+              )
+              : (
 
-                    key={
-                      slot.PriceID
-                    }
-
-                    className={
-                      slot.available
-
-                        ? "field-slot available"
-
-                        : "field-slot booked"
-                    }
-
-                  >
-
-
-                    {/* TIME + PRICE */}
+                slots.map(
+                  slot => (
 
                     <div
-                      className="
-                        field-slot-main
-                      "
+
+                      key={
+                        slot.PriceID
+                      }
+
+                      className={
+                        slot.available
+                          ? "field-slot available"
+                          : "field-slot booked"
+                      }
+
                     >
 
-                      <strong>
+                      {/* TIME + PRICE */}
 
-                        {
-                          slot.StartTime
-                        }
+                      <div
+                        className="field-slot-main"
+                      >
 
-                        {" - "}
+                        <strong>
 
-                        {
-                          slot.EndTime
-                        }
+                          {
+                            slot.StartTime
+                          }
 
-                      </strong>
+                          {" - "}
 
+                          {
+                            slot.EndTime
+                          }
+
+                        </strong>
+
+
+                        <span
+                          className="field-slot-price"
+                        >
+
+                          {
+                            Number(
+                              slot.Price || 0
+                            ).toLocaleString(
+                              "vi-VN"
+                            )
+                          }
+
+                          đ
+
+                        </span>
+
+                      </div>
+
+
+                      {/* STATUS */}
 
                       <span
-                        className="
-                          field-slot-price
-                        "
+                        className="field-slot-status"
                       >
 
                         {
-                          Number(
-                            slot.Price ||
-                            0
-                          ).toLocaleString(
-                            "vi-VN"
-                          )
+                          slot.available
+                            ? "Trống"
+                            : (
+                              slot.reason
+                              ===
+                              "FIELD_UNAVAILABLE"
+                                ? "Bảo trì"
+                                : "Đã đặt"
+                            )
                         }
-
-                        đ
 
                       </span>
 
                     </div>
 
-
-                    {/* STATUS */}
-
-                    <span
-                      className="
-                        field-slot-status
-                      "
-                    >
-
-                      {
-                        slot.available
-                          ? "Trống"
-                          : (
-                            slot.reason
-                            ===
-                            "FIELD_UNAVAILABLE"
-                              ? "Bảo trì"
-                              : "Đã đặt"
-                          )
-                      }
-
-                    </span>
-
-                  </div>
-
+                  )
                 )
               )
-            )
           }
 
         </div>
 
 
         <div
-          className="
-            field-divider
-          "
+          className="field-divider"
         />
 
 
         {/* BOTTOM */}
 
         <div
-          className="
-            field-bottom
-          "
+          className="field-bottom"
         >
 
           <div>
 
             <span
-              className="
-                price-label
-              "
+              className="price-label"
             >
+
               GIÁ THUÊ TỪ
+
             </span>
 
 
@@ -405,47 +421,49 @@ function FieldCard({
             fieldAvailable
             &&
             hasAvailableSlot
-            ? (
+              ? (
 
-              <Link
+                <button
 
-                to={
-                  `/booking?fieldId=${id}&date=${selectedDate}`
-                }
+                  type="button"
 
-                className="
-                  field-detail-button
-                "
-              >
+                  className="field-detail-button"
 
-                Chọn sân
+                  onClick={
+                    handleChooseField
+                  }
 
-              </Link>
+                >
 
-            )
-            : (
+                  Chọn sân
 
-              <button
+                </button>
 
-                type="button"
+              )
+              : (
 
-                disabled
+                <button
 
-                className="
-                  field-detail-button
-                  field-disabled
-                "
-              >
+                  type="button"
 
-                {
-                  fieldAvailable
-                    ? "Hết lịch"
-                    : "Bảo trì"
-                }
+                  disabled
 
-              </button>
+                  className="
+                    field-detail-button
+                    field-disabled
+                  "
 
-            )
+                >
+
+                  {
+                    fieldAvailable
+                      ? "Hết lịch"
+                      : "Bảo trì"
+                  }
+
+                </button>
+
+              )
           }
 
         </div>

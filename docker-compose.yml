@@ -1,5 +1,4 @@
 services:
-
   frontend:
     build: ./frontend
     container_name: frontend
@@ -9,7 +8,9 @@ services:
       VITE_API_URL: http://localhost:5000
 
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: backend
     ports:
       - "5000:5000"
@@ -17,6 +18,6 @@ services:
       DB_DRIVER: ${DB_DRIVER}
       DB_SERVER: ${DB_SERVER}
       DB_NAME: ${DB_NAME}
-      DB_TRUSTED_CONNECTION: ${DB_TRUSTED_CONNECTION}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       DB_TRUST_SERVER_CERTIFICATE: ${DB_TRUST_SERVER_CERTIFICATE}
-

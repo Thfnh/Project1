@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:5000/api/fields";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/fields`;;
 
 
 /* =========================================================
@@ -250,6 +250,30 @@ export const deleteField = async (
     throw new Error(
       result.message ||
       "Không thể xóa sân"
+    );
+  }
+
+  return result;
+};
+
+/* =========================================================
+   GET ALL FIELDS AVAILABILITY
+   BE-05.1
+========================================================= */
+
+export const getAllFieldsAvailability = async (date) => {
+
+  const response = await fetch(
+    `${API_URL}/availability?date=${encodeURIComponent(date)}`
+  );
+
+  const result = await response.json();
+
+  if (!response.ok) {
+
+    throw new Error(
+      result.message ||
+      "Không thể kiểm tra lịch toàn bộ sân"
     );
   }
 
